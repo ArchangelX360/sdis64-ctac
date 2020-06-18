@@ -1,0 +1,43 @@
+# Root domain definition
+dn: dc=intranet,dc=sdis64,dc=fr
+objectclass: top
+objectclass: domain
+objectclass: extensibleObject
+dc: intranet
+
+# Organizational Units
+dn: ou=groups,dc=intranet,dc=sdis64,dc=fr
+objectclass: top
+objectclass: organizationalUnit
+ou: groups
+
+dn: ou=people,dc=intranet,dc=sdis64,dc=fr
+objectclass: top
+objectclass: organizationalUnit
+ou: people
+
+# Regular user
+dn: uid=rick,ou=people,dc=intranet,dc=sdis64,dc=fr
+objectclass: top
+objectclass: person
+objectclass: organizationalPerson
+objectclass: inetOrgPerson
+cn: Rick Sanchez
+sn: Sanchez
+ou: people
+uid: rick
+userPassword: rickspassword
+
+# Admin user
+dn: uid=admin-user,ou=people,dc=intranet,dc=sdis64,dc=fr
+objectclass: top
+objectclass: person
+objectclass: organizationalPerson
+objectclass: inetOrgPerson
+cn: AdminFirst AdminLast
+sn: AdminLast
+ou: people
+uid: admin-user
+userPassword: admin-password
+
+# Embedded LDAP does not support group, so we hack it in LdapAuthoritiesPopulator of TestLdapConfigurer

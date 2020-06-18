@@ -1,0 +1,11 @@
+*.iml
+.idea/
+
+.gradle
+build
+
+local.properties
+brain/src/main/resources/application-default.properties
+brain/configuration-encryption-key
+
+ui/src/jsMain/resources/maps/*.png

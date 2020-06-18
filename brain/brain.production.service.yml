@@ -1,0 +1,83 @@
+version: '3.8'
+
+networks:
+  ctac:
+    name: ctac
+
+volumes:
+  maps:
+  session_store:
+
+services:
+  brain:
+    image: registry.hub.docker.com/archangelx360/ctac:brain-production
+    deploy:
+      update_config:
+        order: start-first
+        failure_action: rollback
+      resources:
+        limits:
+          memory: 2G
+        reservations:
+          memory: 500M
+    environment:
+      DEPLOY_ENV: production
+    ports:
+      - "8081:8081"
+    networks:
+      - ctac
+    volumes:
+      - type: volume
+        source: session_store
+        target: /tmp/spring/session-store
+      - type: volume
+        source: maps
+        target: /data/maps
+      - type: bind
+        source: /data/configuration-encryption-key
+        target: /data/configuration-encryption-key
+  chrome_browser:
+    image: zenika/alpine-chrome:100
+    deploy:
+      update_config:
+        order: start-first
+        failure_action: rollback
+      resources:
+        limits:
+          memory: 500M
+        reservations:
+          memory: 100M
+    command: "--no-sandbox --disable-gpu --remote-debugging-address=0.0.0.0 --remote-debugging-port=9222"
+    networks:
+      - ctac
+    ports:
+      - "9222:9222"
+    volumes:
+      - type: bind
+        source: /var/run/dbus/system_bus_socket
+        target: /var/run/dbus/system_bus_socket
+  ### DB services ###
+  postgresql:
+    image: postgres:15.1-bullseye
+    deploy:
+      update_config:
+        order: start-first
+        failure_action: rollback
+    env_file:
+      - /data/db_credentials
+    volumes:
+      - /data/postgre_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - ctac
+  adminer:
+    image: adminer
+    deploy:
+      update_config:
+        order: start-first
+        failure_action: rollback
+    ports:
+      - 8079:8080
+    networks:
+      - ctac

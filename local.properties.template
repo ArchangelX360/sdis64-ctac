@@ -1,0 +1,29 @@
+# This should not be exposed in the git repository, it should be configured by developers on their local machine
+# and *never* be versioned
+
+# docker.username=
+# docker.password=
+
+# SDIS64 environments are not directly reachable from the public internet, they are configured under a ssh proxy
+# the following properties relates to this proxy ssh public facing server.
+# ssh.remotes.proxy.host=
+# ssh.remotes.proxy.port=
+# ssh.remotes.proxy.username=
+# Path to the ssh private key file stored on your local machine, that is allowed to login on the ssh proxy server.
+# ssh.remotes.proxy.keyFilepath=
+
+# Host and port of the staging environment are already configured in the general configuration, as they are not
+# sensitive.
+# ssh.remotes.staging.host=
+# ssh.remotes.staging.port=
+# ssh.remotes.staging.username=
+# Path to the ssh private key file stored on your local machine, that is allowed to login on the production server.
+# ssh.remotes.staging.keyFilepath=
+
+# Host and port of the production environment are already configured in the general configuration, as they are not
+# sensitive.
+# ssh.remotes.staging.host=
+# ssh.remotes.staging.port=
+# ssh.remotes.production.username=
+# Path to the ssh private key file stored on your local machine, that is allowed to login on the production server.
+# ssh.remotes.production.keyFilepath=

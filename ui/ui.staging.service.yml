@@ -1,0 +1,31 @@
+version: '3.8'
+
+networks:
+  ctac:
+    name: ctac
+
+volumes:
+  maps:
+
+services:
+  ui:
+    image: registry.hub.docker.com/archangelx360/ctac:ui-staging
+    deploy:
+      update_config:
+        order: start-first
+        failure_action: rollback
+      resources:
+        limits:
+          memory: 500M
+        reservations:
+          memory: 100M
+    environment:
+      DEPLOY_ENV: staging
+    ports:
+      - "7071:80"
+    networks:
+      - ctac
+    volumes:
+      - type: volume
+        source: maps
+        target: /usr/share/nginx/html/maps

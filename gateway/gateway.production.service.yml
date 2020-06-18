@@ -1,0 +1,17 @@
+version: '3.8'
+
+networks:
+  ctac:
+    name: ctac
+
+services:
+  gateway:
+    image: registry.hub.docker.com/archangelx360/ctac:gateway-production
+    deploy:
+      update_config:
+        order: start-first
+        failure_action: rollback
+    ports:
+      - "80:80"
+    networks:
+      - ctac
