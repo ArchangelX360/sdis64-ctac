@@ -5,7 +5,6 @@ plugins {
     alias(libs.plugins.kotlin.plugin.spring)
     alias(libs.plugins.kotlin.plugin.jpa)
     alias(libs.plugins.kotlin.plugin.serialization)
-    alias(libs.plugins.kotlin.kapt) // Spring @ConfigurationProperties annotation processing
     alias(libs.plugins.spring.boot)
     alias(libs.plugins.spring.dependency.management)
     id("ctac-configuration-encryption-plugin")
@@ -23,7 +22,7 @@ dependencies {
     implementation(kotlin("stdlib"))
     implementation(kotlin("reflect"))
 
-    kapt("org.springframework.boot:spring-boot-configuration-processor")
+    annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 
     implementation("org.springframework.boot:spring-boot-properties-migrator")
 
