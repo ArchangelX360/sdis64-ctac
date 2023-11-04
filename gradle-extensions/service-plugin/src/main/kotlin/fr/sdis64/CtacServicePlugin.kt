@@ -59,6 +59,9 @@ private fun Project.configuringEnvironmentTasks(serviceName: Provider<String>, e
     val dockerPushTask = project.tasks.register<DockerPushTask>("dockerPush$capitalizedEnvName") {
         dependsOn(dockerBuildTask)
         group = "deploy"
+        dockerRegistry.set(project.dockerRegistry)
+        dockerLogin.set(project.dockerUser)
+        dockerPassword.set(project.dockerPassword)
         tag.set(dockerBuildTask.flatMap { it.tag })
     }
 

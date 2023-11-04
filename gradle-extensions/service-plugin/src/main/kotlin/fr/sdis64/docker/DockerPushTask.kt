@@ -13,10 +13,25 @@ internal abstract class DockerPushTask @Inject constructor(
     objectFactory: ObjectFactory,
 ) : DefaultTask() {
     @Input
+    val dockerRegistry = objectFactory.property<String>()
+
+    @Input
+    val dockerLogin = objectFactory.property<String>()
+
+    @Input
+    val dockerPassword = objectFactory.property<String>()
+
+    @Input
     val tag = objectFactory.property<String>()
 
     @TaskAction
     fun build() {
+        dockerPassword.get().byteInputStream().use { passwordStream ->
+            execOperations.exec {
+                commandLine("docker", "login", dockerRegistry.get(), "--username", dockerLogin.get(), "--password-stdin")
+                standardInput = passwordStream
+            }
+        }
         execOperations.exec {
             commandLine("docker", "push", tag.get())
         }
