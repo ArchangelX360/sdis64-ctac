@@ -6,6 +6,6 @@ dependencyResolutionManagement {
     }
 }
 
+includeBuild("ctac-conventions")
 include("configuration-encryption-plugin")
-include("ctac-conventions")
 include("service-plugin")

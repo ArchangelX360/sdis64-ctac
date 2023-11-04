@@ -1,10 +1,7 @@
 plugins {
     `kotlin-dsl`
     `java-gradle-plugin`
-}
-
-repositories {
-    mavenCentral()
+    id("ctac.repositories-conventions")
 }
 
 gradlePlugin {
