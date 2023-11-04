@@ -4,9 +4,9 @@
 
 compose = "1.5.10"
 kotlin = "1.9.10"
-kotlinx-coroutines = "1.6.4"
-kotlinx-serialization = "1.4.1"
-kotlinx-datetime = "0.4.0"
+kotlinx-coroutines = "1.7.3"
+kotlinx-serialization = "1.6.0"
+kotlinx-datetime = "0.4.1"
 ktor-client = "2.2.2"
 micrometer-registry-prometheus = "1.10.3"
 jasypt-spring-boot = "3.0.5"
