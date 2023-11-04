@@ -1,6 +1,8 @@
 plugins {
-    kotlin("multiplatform")
-    kotlin("plugin.serialization")
+    alias(libs.plugins.kotlin.multiplatform)
+    alias(libs.plugins.kotlin.plugin.serialization)
+    id("ctac.repositories-conventions")
+    id("ctac.test-runner-conventions")
 }
 
 kotlin {

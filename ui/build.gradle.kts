@@ -1,15 +1,11 @@
 import fr.sdis64.supportedEnvironments
 
 plugins {
-    kotlin("multiplatform")
-    id("org.jetbrains.compose")
+    alias(libs.plugins.kotlin.multiplatform)
+    alias(libs.plugins.compose)
+    id("ctac.repositories-conventions")
     id("ctac-service-plugin")
-}
-
-repositories {
-    mavenCentral()
-    maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
-    google()
+    id("ctac.test-runner-conventions")
 }
 
 kotlin {

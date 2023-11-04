@@ -1,6 +1,8 @@
 plugins {
-    kotlin("multiplatform")
-    kotlin("plugin.serialization")
+    alias(libs.plugins.kotlin.multiplatform)
+    alias(libs.plugins.kotlin.plugin.serialization)
+    id("ctac.repositories-conventions")
+    id("ctac.test-runner-conventions")
 }
 
 kotlin {
@@ -10,6 +12,7 @@ kotlin {
         browser()
     }
     sourceSets {
+        @Suppress("UNUSED_VARIABLE")
         val commonMain by getting {
             dependencies {
                 api(project(":api"))
@@ -24,6 +27,7 @@ kotlin {
                 implementation(libs.ktor.client.serialization)
             }
         }
+        @Suppress("UNUSED_VARIABLE")
         val jvmMain by getting {
             dependencies {
                 implementation(libs.ktor.client.java)

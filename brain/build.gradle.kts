@@ -1,15 +1,17 @@
 import fr.sdis64.supportedEnvironments
 
 plugins {
-    kotlin("jvm")
-    kotlin("plugin.spring")
-    kotlin("plugin.jpa")
-    kotlin("plugin.serialization")
-    kotlin("kapt") // Spring @ConfigurationProperties annotation processing
-    id("org.springframework.boot")
-    id("io.spring.dependency-management")
-    id("ctac-service-plugin")
+    alias(libs.plugins.kotlin.jvm)
+    alias(libs.plugins.kotlin.plugin.spring)
+    alias(libs.plugins.kotlin.plugin.jpa)
+    alias(libs.plugins.kotlin.plugin.serialization)
+    alias(libs.plugins.kotlin.kapt) // Spring @ConfigurationProperties annotation processing
+    alias(libs.plugins.spring.boot)
+    alias(libs.plugins.spring.dependency.management)
     id("ctac-configuration-encryption-plugin")
+    id("ctac.repositories-conventions")
+    id("ctac-service-plugin")
+    id("ctac.test-runner-conventions")
 }
 
 kotlin {

@@ -2,12 +2,16 @@
 
 [versions]
 
+compose = "1.4.0"
+kotlin = "1.8.20"
 kotlinx-coroutines = "1.6.4"
 kotlinx-serialization = "1.4.1"
 kotlinx-datetime = "0.4.0"
 ktor-client = "2.2.2"
 micrometer-registry-prometheus = "1.10.3"
 jasypt-spring-boot = "3.0.5"
+springboot = "3.0.2"
+spring-dep = "1.1.0"
 xmlutil = "0.86.0"
 
 [libraries]
@@ -30,3 +34,16 @@ jasypt-spring-boot = { module = "com.github.ulisesbocchio:jasypt-spring-boot", v
 
 xmlutil-core-jvm = { module = "io.github.pdvrieze.xmlutil:core-jvm", version.ref = "xmlutil" }
 xmlutil-serialization-jvm = { module = "io.github.pdvrieze.xmlutil:serialization-jvm", version.ref = "xmlutil" }
+
+[plugins]
+
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin"}
+kotlin-js = { id = "org.jetbrains.kotlin.js", version.ref = "kotlin"}
+kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin"}
+kotlin-plugin-spring = { id = "org.jetbrains.kotlin.plugin.spring", version.ref = "kotlin"}
+kotlin-plugin-jpa = { id = "org.jetbrains.kotlin.plugin.jpa", version.ref = "kotlin"}
+kotlin-plugin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin"}
+kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin"}
+spring-boot = { id = "org.springframework.boot", version.ref = "springboot" }
+spring-dependency-management = { id = "io.spring.dependency-management", version.ref = "spring-dep" }
+compose = { id = "org.jetbrains.compose", version.ref = "compose"}

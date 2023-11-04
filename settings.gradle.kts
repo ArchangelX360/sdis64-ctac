@@ -1,4 +1,9 @@
-rootProject.name = "ctac"
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        mavenCentral()
+    }
+}
 
 includeBuild("gradle-extensions")
 
@@ -10,6 +15,8 @@ include("monitoring")
 include("resources")
 include("ui")
 
+rootProject.name = "ctac"
+
 gradle.beforeProject {
     val localPropertiesFile = rootDir.resolve("local.properties")
     if (!localPropertiesFile.exists()) {
@@ -19,11 +26,4 @@ gradle.beforeProject {
     val localProperties = java.util.Properties()
     localProperties.load(localPropertiesFile.inputStream())
     localProperties.forEach { (k, v) -> if (k is String) project.extra.set(k, v) }
-}
-
-pluginManagement {
-    repositories {
-        gradlePluginPortal()
-        mavenCentral()
-    }
 }
