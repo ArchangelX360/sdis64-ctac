@@ -6,6 +6,7 @@ import org.gradle.api.Project
 import org.gradle.api.file.RegularFile
 import org.gradle.api.model.ObjectFactory
 import org.gradle.api.provider.Provider
+import org.gradle.api.provider.ProviderFactory
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.OutputDirectory
@@ -16,29 +17,38 @@ import java.nio.file.Paths
 import javax.inject.Inject
 import kotlin.io.path.createDirectories
 
-open class GenerateConfigTask @Inject constructor(
+internal abstract class GenerateConfigTask @Inject constructor(
     objectFactory: ObjectFactory,
+    providerFactory: ProviderFactory,
 ) : DefaultTask() {
-    @get:Input
+    @Input
     val environment = objectFactory.property<String>()
 
-    @get:OutputDirectory
+    @OutputDirectory
     val configDirectory = objectFactory.directoryProperty()
 
-    @get:Internal
-    val remoteName: Provider<String>
-        get() = environment
+    @Internal
+    val remoteName: Provider<String> = environment
 
-    @get:Internal
-    val configFilepath: Provider<RegularFile>
-        get() = configDirectory.file("ssh_config")
+    @Internal
+    val configFilepath: Provider<RegularFile> = configDirectory.file("ssh_config")
+
+    @Internal
+    val envSshRemote: Provider<SshRemote> = environment.map {
+        project.sshRemote(environment.get())
+    }
+
+    @Internal
+    val proxySshRemote: Provider<SshRemote> = providerFactory.provider {
+        project.sshRemote("proxy")
+    }
 
     @TaskAction
     fun deploy() {
         val sshConfig = SshConfig(
             remoteName = remoteName.get(),
-            remote = project.sshRemote(environment.get()),
-            proxy = project.sshRemote("proxy"),
+            remote = envSshRemote.get(),
+            proxy = proxySshRemote.get(),
         )
 
         val configFile = configFilepath.get().asFile
