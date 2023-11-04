@@ -56,7 +56,7 @@ ctacService {
                     }
                     dependsOn(buildTask, tasks.named("allTests"))
 
-                    destinationDir = project.buildDir.resolve("docker/${envName}")
+                    into(layout.buildDirectory.dir("docker/${envName}"))
                     from(
                         buildTask.map { it.outputs },
                         file("nginx.conf"),

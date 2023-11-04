@@ -13,7 +13,7 @@ ctacService {
     val prepareTask = tasks.register<Sync>("dockerPrepare${capitalizedEnvName}") {
       group = "package"
 
-      destinationDir = project.buildDir.resolve("docker/${envName}")
+      destinationDir = layout.buildDirectory.dir("docker/${envName}").get().asFile
       from("Dockerfile")
       into("conf") {
         from("conf/nginx.conf")

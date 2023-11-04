@@ -13,7 +13,7 @@ ctacService {
     val prepareTask = tasks.register<Sync>("dockerPrepare$capitalizedEnvName") {
       group = "package"
 
-      destinationDir = project.buildDir.resolve("docker/${envName}")
+      into(layout.buildDirectory.dir("docker/${envName}"))
       from(
         "prometheus/${envName}/Dockerfile",
         "prometheus/${envName}/prometheus.yml"
