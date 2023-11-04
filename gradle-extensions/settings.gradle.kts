@@ -5,3 +5,6 @@ dependencyResolutionManagement {
         }
     }
 }
+
+include("service-plugin")
+include("configuration-encryption-plugin")

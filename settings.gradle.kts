@@ -1,7 +1,6 @@
 rootProject.name = "ctac"
 
-includeBuild("service-plugin")
-includeBuild("configuration-encryption-plugin")
+includeBuild("gradle-extensions")
 
 include("api")
 include("client")
