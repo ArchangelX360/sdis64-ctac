@@ -110,7 +110,7 @@ val prepareTask = tasks.register<Sync>("dockerPrepare") {
     dependsOn(tasks.bootJar)
     group = "package"
 
-    destinationDir = project.buildDir.resolve("docker")
+    into(layout.buildDirectory.dir("docker"))
     from(
         tasks.bootJar.map { it.outputs.files.singleFile },
         file("Dockerfile"),
