@@ -10,17 +10,17 @@ import org.gradle.kotlin.dsl.property
 import org.gradle.process.ExecOperations
 import javax.inject.Inject
 
-open class ExecSshTask @Inject constructor(
+internal abstract class ExecSshTask @Inject constructor(
     private val execOperations: ExecOperations,
     objectFactory: ObjectFactory,
 ) : DefaultTask() {
-    @get:Input
+    @Input
     val remoteName = objectFactory.property<String>()
 
-    @get:InputFile
+    @InputFile
     val configFilepath = objectFactory.fileProperty()
 
-    @get:Input
+    @Input
     val commands = objectFactory.listProperty<String>()
 
     @TaskAction

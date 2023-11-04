@@ -29,7 +29,7 @@ interface CtacEnvironments {
     fun environment(name: String, configure: CtacEnvironment.() -> Unit)
 }
 
-internal open class DefaultCtacService @Inject constructor(
+internal abstract class DefaultCtacService @Inject constructor(
     objectFactory: ObjectFactory,
 ) : CtacService {
     override val name = objectFactory.property<String>()

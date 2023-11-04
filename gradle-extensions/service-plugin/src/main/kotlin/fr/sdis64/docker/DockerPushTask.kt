@@ -8,11 +8,11 @@ import org.gradle.kotlin.dsl.property
 import org.gradle.process.ExecOperations
 import javax.inject.Inject
 
-open class DockerPushTask @Inject constructor(
+internal abstract class DockerPushTask @Inject constructor(
     private val execOperations: ExecOperations,
     objectFactory: ObjectFactory,
 ) : DefaultTask() {
-    @get:Input
+    @Input
     val tag = objectFactory.property<String>()
 
     @TaskAction

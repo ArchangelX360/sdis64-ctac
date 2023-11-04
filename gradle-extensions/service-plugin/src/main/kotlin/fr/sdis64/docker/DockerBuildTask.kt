@@ -7,18 +7,18 @@ import org.gradle.kotlin.dsl.property
 import org.gradle.process.ExecOperations
 import javax.inject.Inject
 
-open class DockerBuildTask @Inject constructor(
+internal abstract class DockerBuildTask @Inject constructor(
     objectFactory: ObjectFactory,
-    @Internal val execOps: ExecOperations,
+    private val execOps: ExecOperations,
 ) : DefaultTask() {
-    @get:InputDirectory
+    @InputDirectory
     val directory = objectFactory.directoryProperty()
 
-    @get:Input
+    @Input
     val tag = objectFactory.property<String>()
 
-    @get:Input
-    @get:Optional
+    @Input
+    @Optional
     val platform = objectFactory.property<String>()
 
     @TaskAction
