@@ -10,7 +10,7 @@ kotlinx-datetime = "0.4.1"
 ktor-client = "2.2.2"
 micrometer-registry-prometheus = "1.10.3"
 jasypt-spring-boot = "3.0.5"
-springboot = "3.1.5"
+spring-boot = "3.1.5"
 spring-dep = "1.1.3"
 xmlutil = "0.86.0"
 
@@ -43,6 +43,6 @@ kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref 
 kotlin-plugin-spring = { id = "org.jetbrains.kotlin.plugin.spring", version.ref = "kotlin"}
 kotlin-plugin-jpa = { id = "org.jetbrains.kotlin.plugin.jpa", version.ref = "kotlin"}
 kotlin-plugin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin"}
-spring-boot = { id = "org.springframework.boot", version.ref = "springboot" }
+spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
 spring-dependency-management = { id = "io.spring.dependency-management", version.ref = "spring-dep" }
 compose = { id = "org.jetbrains.compose", version.ref = "compose"}
