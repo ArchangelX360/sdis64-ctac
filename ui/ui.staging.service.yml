@@ -19,8 +19,6 @@ services:
           memory: 500M
         reservations:
           memory: 100M
-    environment:
-      DEPLOY_ENV: staging
     ports:
       - "7071:80"
     networks:

@@ -2,6 +2,8 @@ FROM amazoncorretto:17.0.6-alpine3.17
 LABEL maintainer="Titouan Bion <titouan.bion@gmail.com>"
 
 ENV DEPLOY_ENV=default
+ENV OTEL_EXPORTER_OTLP_ENDPOINT=""
+ENV OTEL_EXPORTER_OTLP_HEADERS=""
 
 # this will not work if you are using the Dockerfile directly with `docker build .`
 # Instead you should rely on `./gradlew ":brain:docker" task and similar

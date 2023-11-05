@@ -1,42 +1,6 @@
 <configuration>
     <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
     <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
-
-    <springProfile name="staging | production">
-        <springProperty name="lokiUsername" source="loki.username"/>
-        <springProperty name="lokiPassword" source="loki.password"/>
-        <springProperty name="lokiClusterEnvironment" source="spring.profiles.active"/>
-
-        <appender name="LOKI" class="com.github.loki4j.logback.Loki4jAppender">
-            <!-- Loki Cloud hosted solution is limiting the batch size to 65536 Bytes -->
-            <batchMaxBytes>65536</batchMaxBytes>
-            <batchTimeoutMs>10000</batchTimeoutMs>
-            <metricsEnabled>true</metricsEnabled>
-            <http>
-                <url>https://logs-prod-us-central1.grafana.net/loki/api/v1/push</url>
-                <auth>
-                    <username>${lokiUsername}</username>
-                    <password>${lokiPassword}</password>
-                </auth>
-                <requestTimeoutMs>15000</requestTimeoutMs>
-            </http>
-            <format>
-                <label>
-                    <pattern>
-                        application=brain,instance=${HOSTNAME},level=%level,class=%logger,cluster_environment=${lokiClusterEnvironment}
-                    </pattern>
-                </label>
-                <message>
-                    <pattern>%d{yyyy-MM-dd_HH:mm:ss.SSS} level=%level class=%logger thread=%thread | %msg %ex</pattern>
-                </message>
-                <sortByTime>true</sortByTime>
-            </format>
-        </appender>
-        <root level="INFO">
-            <appender-ref ref="LOKI"/>
-        </root>
-    </springProfile>
-
     <root level="DEBUG">
         <appender-ref ref="CONSOLE"/>
     </root>

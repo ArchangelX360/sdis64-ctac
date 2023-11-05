@@ -1,4 +1,5 @@
 import fr.sdis64.supportedEnvironments
+import fr.sdis64.getMandatoryPropOrEnv
 
 plugins {
     alias(libs.plugins.kotlin.jvm)
@@ -53,7 +54,8 @@ dependencies {
     implementation(libs.ktor.serialization.kotlinx.json)
     implementation(libs.ktor.client.java)
 
-    implementation("com.github.loki4j:loki-logback-appender:1.4.0")
+    // instead of having to use -javaagent, we do it in the code
+    implementation("io.opentelemetry.contrib:opentelemetry-runtime-attach:1.31.0-alpha")
 
     implementation("org.jetbrains.lets-plot:lets-plot-common:3.1.0")
     implementation("org.jetbrains.lets-plot:lets-plot-kotlin-jvm:4.3.0")
@@ -97,6 +99,12 @@ tasks.test {
 
 tasks.bootJar {
     dependsOn(tasks.check)
+}
+
+tasks.bootRun {
+    val otelExporterOtlpEndpointEnvVar = "OTEL_EXPORTER_OTLP_ENDPOINT"
+    environment(otelExporterOtlpEndpointEnvVar, project.getMandatoryPropOrEnv("otel.exporter.otlp.endpoint", otelExporterOtlpEndpointEnvVar))
+    environment("OTEL_EXPORTER_OTLP_HEADERS", project.getMandatoryPropOrEnv("otel.exporter.otlp.basic-token").let { token -> "Authorization=Basic $token" })
 }
 
 configurationEncryption {

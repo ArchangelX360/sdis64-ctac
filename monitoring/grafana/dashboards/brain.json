@@ -25,10 +25,10 @@
           "uid": "grafanacloud-prom"
         },
         "enable": true,
-        "expr": "process_start_time_seconds{job=\"brain\", cluster_environment=~\"$cluster_environment\"} * 1000",
+        "expr": "process_start_time{job=~\"$job\", instance=~\"$instance\"} * 1000",
         "iconColor": "text",
         "name": "Rollouts",
-        "textFormat": "[{{ cluster_environment }}] {{ job }} restarted / was rolled out",
+        "textFormat": "[{{ job }}] [{{ instance }}] restarted / was rolled out",
         "titleFormat": "Rollout",
         "useValueForTime": "on"
       }
@@ -39,7 +39,7 @@
   "fiscalYearStartMonth": 0,
   "gnetId": 10280,
   "graphTooltip": 1,
-  "id": 4,
+  "id": 18,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -66,7 +66,7 @@
           "refId": "A"
         }
       ],
-      "title": "[$cluster_environment] Scheduled",
+      "title": "[$job] [$instance] Scheduled",
       "type": "row"
     },
     {
@@ -116,6 +116,7 @@
         "displayMode": "basic",
         "minVizHeight": 10,
         "minVizWidth": 0,
+        "namePlacement": "auto",
         "orientation": "horizontal",
         "reduceOptions": {
           "calcs": [
@@ -128,7 +129,7 @@
         "text": {},
         "valueMode": "color"
       },
-      "pluginVersion": "10.2.0-60099",
+      "pluginVersion": "10.3.0-62838",
       "targets": [
         {
           "datasource": {
@@ -136,19 +137,20 @@
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "time() - brain_fetcher_last_successful_refresh{job=\"brain\", cluster_environment=\"$cluster_environment\", fetcher_name!~\"systel_cache.*\"}",
+          "expr": "time() - brain_fetcher_last_successful_refresh{job=~\"$job\", instance=~\"$instance\", fetcher_name!~\"systel_cache.*\"}",
           "instant": true,
           "interval": "",
           "intervalFactor": 1,
-          "legendFormat": "[{{cluster_environment}}] {{fetcher_name}}",
+          "legendFormat": "[{{job}}] {{fetcher_name}}",
           "refId": "A"
         }
       ],
-      "title": "[$cluster_environment] Fetcher last refresh",
+      "title": "[$job] [$instance] Fetcher last refresh",
       "type": "bargauge"
     },
     {
       "datasource": {
+        "type": "prometheus",
         "uid": "$datasource"
       },
       "fieldConfig": {
@@ -193,6 +195,7 @@
         "displayMode": "basic",
         "minVizHeight": 10,
         "minVizWidth": 0,
+        "namePlacement": "auto",
         "orientation": "horizontal",
         "reduceOptions": {
           "calcs": [
@@ -205,21 +208,22 @@
         "text": {},
         "valueMode": "color"
       },
-      "pluginVersion": "10.2.0-60099",
+      "pluginVersion": "10.3.0-62838",
       "targets": [
         {
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "time() - brain_fetcher_last_successful_refresh{job=\"brain\", cluster_environment=\"$cluster_environment\", fetcher_name=~\"systel_cache.*\"}",
+          "editorMode": "code",
+          "expr": "time() - brain_fetcher_last_successful_refresh{job=~\"$job\", instance=~\"$instance\", fetcher_name=~\"systel_cache.*\"}",
           "instant": true,
           "interval": "",
           "intervalFactor": 1,
-          "legendFormat": "[{{cluster_environment}}] {{fetcher_name}}",
+          "legendFormat": "[{{job}}] {{fetcher_name}}",
           "refId": "A"
         }
       ],
-      "title": "[$cluster_environment] Systel cache last refresh",
+      "title": "[$job] [$instance] Systel cache last refresh",
       "type": "bargauge"
     },
     {
@@ -245,7 +249,7 @@
           "refId": "A"
         }
       ],
-      "title": "[$cluster_environment] Basic Statistics",
+      "title": "[$job] [$instance] Basic Statistics",
       "type": "row"
     },
     {
@@ -300,13 +304,13 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "10.2.0-60099",
+      "pluginVersion": "10.3.0-62838",
       "targets": [
         {
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "process_uptime_seconds{job=~\"$job\", cluster_environment=~\"$cluster_environment\", instance=~\"$instance\"}",
+          "expr": "process_uptime{job=~\"$job\", instance=~\"$instance\"}",
           "format": "time_series",
           "instant": true,
           "interval": "",
@@ -331,11 +335,11 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
-            "axisShow": false,
             "barAlignment": 0,
             "drawStyle": "line",
             "fillOpacity": 0,
@@ -416,7 +420,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sum(jvm_memory_used_bytes{job=~\"$job\", cluster_environment=~\"$cluster_environment\", instance=~\"$instance\", area=\"heap\"})",
+          "expr": "sum(jvm_memory_used{job=~\"$job\", instance=~\"$instance\", area=\"heap\"})",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
@@ -431,7 +435,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sum(jvm_memory_max_bytes{job=~\"$job\", cluster_environment=~\"$cluster_environment\", instance=~\"$instance\", area=\"heap\"})",
+          "expr": "sum(jvm_memory_max{job=~\"$job\", instance=~\"$instance\", area=\"heap\"})",
           "format": "time_series",
           "hide": false,
           "instant": false,
@@ -447,7 +451,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sum(jvm_memory_used_bytes{job=~\"$job\", cluster_environment=~\"$cluster_environment\", instance=~\"$instance\", area=\"nonheap\"})",
+          "expr": "sum(jvm_memory_used{job=~\"$job\", instance=~\"$instance\", area=\"nonheap\"})",
           "format": "time_series",
           "hide": false,
           "instant": false,
@@ -463,7 +467,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sum(jvm_memory_max_bytes{job=~\"$job\", cluster_environment=~\"$cluster_environment\", instance=~\"$instance\", area=\"nonheap\"})",
+          "expr": "sum(jvm_memory_max{job=~\"$job\", instance=~\"$instance\", area=\"nonheap\"})",
           "format": "time_series",
           "hide": true,
           "instant": false,
@@ -487,11 +491,11 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
-            "axisShow": false,
             "barAlignment": 0,
             "drawStyle": "line",
             "fillOpacity": 10,
@@ -568,7 +572,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "system_load_average_1m{instance=~\"$instance\", job=~\"$job\", cluster_environment=~\"$cluster_environment\"}",
+          "expr": "system_load_average_1m{job=~\"$job\", instance=~\"$instance\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Load Average [1m]",
@@ -578,7 +582,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "system_cpu_count{instance=~\"$instance\", job=~\"$job\", cluster_environment=~\"$cluster_environment\"}",
+          "expr": "system_cpu_count{job=~\"$job\", instance=~\"$instance\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "CPU Core Size",
@@ -598,11 +602,11 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
-            "axisShow": false,
             "barAlignment": 0,
             "drawStyle": "line",
             "fillOpacity": 10,
@@ -679,7 +683,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "system_cpu_usage{instance=~\"$instance\", job=~\"$job\", cluster_environment=~\"$cluster_environment\"}",
+          "expr": "system_cpu_usage{job=~\"$job\", instance=~\"$instance\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "System CPU Usage",
@@ -689,7 +693,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "process_cpu_usage{instance=~\"$instance\", job=~\"$job\", cluster_environment=~\"$cluster_environment\"}",
+          "expr": "process_cpu_usage{job=~\"$job\", instance=~\"$instance\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Process CPU Usage",
@@ -710,11 +714,11 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
-            "axisShow": false,
             "barAlignment": 0,
             "drawStyle": "line",
             "fillOpacity": 10,
@@ -792,7 +796,7 @@
             "uid": "$datasource"
           },
           "exemplar": true,
-          "expr": "process_files_open_files{instance=~\"$instance\", job=~\"$job\", cluster_environment=~\"$cluster_environment\"}",
+          "expr": "process_files_open{job=~\"$job\", instance=~\"$instance\"}",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -804,7 +808,7 @@
             "uid": "$datasource"
           },
           "exemplar": true,
-          "expr": "process_files_max_files{instance=~\"$instance\", job=~\"$job\", cluster_environment=~\"$cluster_environment\"}",
+          "expr": "process_files_max{job=~\"$job\", instance=~\"$instance\"}",
           "format": "time_series",
           "hide": true,
           "interval": "",
@@ -817,7 +821,7 @@
             "uid": "$datasource"
           },
           "exemplar": true,
-          "expr": "rate(process_files_open_files{instance=~\"$instance\", job=~\"$job\", cluster_environment=~\"$cluster_environment\"}[10m])",
+          "expr": "rate(process_files_open{job=~\"$job\", instance=~\"$instance\"}[10m])",
           "hide": false,
           "instant": false,
           "interval": "",
@@ -879,13 +883,13 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "10.2.0-60099",
+      "pluginVersion": "10.3.0-62838",
       "targets": [
         {
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "process_start_time_seconds{job=~\"$job\", cluster_environment=~\"$cluster_environment\", instance=~\"$instance\"}*1000",
+          "expr": "process_start_time{job=~\"$job\", instance=~\"$instance\"}*1000",
           "format": "time_series",
           "instant": true,
           "interval": "",
@@ -928,7 +932,8 @@
             "type": "loki",
             "uid": "grafanacloud-logs"
           },
-          "expr": "{application=\"brain\", cluster_environment=~\"$cluster_environment\", level=~\"WARN|ERROR\"}",
+          "editorMode": "code",
+          "expr": "{job=~\"$job\", instance=~\"$instance\", level=~\"WARN|ERROR\"}",
           "legendFormat": "",
           "queryType": "randomWalk",
           "refId": "A"
@@ -947,11 +952,11 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
-            "axisShow": false,
             "barAlignment": 0,
             "drawStyle": "line",
             "fillOpacity": 10,
@@ -1026,7 +1031,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "rate(logback_events_total{instance=~\"$instance\", job=~\"$job\", cluster_environment=~\"$cluster_environment\", level=~\"warn|error\"}[5m])",
+          "expr": "rate(logback_events{job=~\"$job\", instance=~\"$instance\", level=~\"warn|error\"}[5m])",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -1061,7 +1066,7 @@
           "refId": "A"
         }
       ],
-      "title": "[$cluster_environment] Brain API",
+      "title": "[$job] [$instance] Brain API",
       "type": "row"
     },
     {
@@ -1074,11 +1079,11 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
-            "axisShow": false,
             "barAlignment": 0,
             "drawStyle": "line",
             "fillOpacity": 10,
@@ -1153,7 +1158,7 @@
             "uid": "$datasource"
           },
           "exemplar": true,
-          "expr": "rate(http_server_requests_seconds_count{instance=~\"$instance\", job=~\"$job\", cluster_environment=~\"$cluster_environment\", status!~\"2..\"}[1m])",
+          "expr": "rate(http_server_requests_count{job=~\"$job\", instance=~\"$instance\", status!~\"2..\"}[1m])",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -1174,11 +1179,11 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
-            "axisShow": false,
             "barAlignment": 0,
             "drawStyle": "line",
             "fillOpacity": 10,
@@ -1253,7 +1258,7 @@
             "uid": "$datasource"
           },
           "exemplar": true,
-          "expr": "rate(http_server_requests_seconds_count{instance=~\"$instance\", job=~\"$job\", cluster_environment=~\"$cluster_environment\", status=~\"2..\"}[1m])",
+          "expr": "rate(http_server_requests_count{job=~\"$job\", instance=~\"$instance\", status=~\"2..\"}[1m])",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -1274,11 +1279,11 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
-            "axisShow": false,
             "barAlignment": 0,
             "drawStyle": "line",
             "fillOpacity": 10,
@@ -1358,7 +1363,7 @@
             "uid": "$datasource"
           },
           "exemplar": true,
-          "expr": "rate(http_server_requests_seconds_sum{instance=~\"$instance\", job=~\"$job\", cluster_environment=~\"$cluster_environment\"}[1m]) / rate(http_server_requests_seconds_count{instance=~\"$instance\", job=~\"$job\", cluster_environment=~\"$cluster_environment\"}[1m])",
+          "expr": "rate(http_server_requests_sum{job=~\"$job\", instance=~\"$instance\"}[1m]) / rate(http_server_requests_count{job=~\"$job\", instance=~\"$instance\"}[1m])",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -1392,7 +1397,7 @@
           "refId": "A"
         }
       ],
-      "title": "[$cluster_environment] HTTP Dependencies",
+      "title": "[$job] [$instance] HTTP Dependencies",
       "type": "row"
     },
     {
@@ -1405,11 +1410,11 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
-            "axisShow": false,
             "barAlignment": 0,
             "drawStyle": "line",
             "fillOpacity": 10,
@@ -1484,7 +1489,7 @@
             "uid": "$datasource"
           },
           "exemplar": true,
-          "expr": "rate(http_client_request_duration_seconds_count{instance=~\"$instance\", job=~\"$job\", cluster_environment=~\"$cluster_environment\", status=~\"2..\"}[1m])",
+          "expr": "rate(http_client_request_duration_count{job=~\"$job\", instance=~\"$instance\", status=~\"2..\"}[1m])",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -1505,6 +1510,7 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
@@ -1518,6 +1524,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
@@ -1540,7 +1547,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -1581,7 +1589,7 @@
             "uid": "$datasource"
           },
           "exemplar": true,
-          "expr": "rate(http_client_request_duration_seconds_count{instance=~\"$instance\", job=~\"$job\", cluster_environment=~\"$cluster_environment\", status!~\"2..\"}[1m])",
+          "expr": "rate(http_client_request_duration_count{job=~\"$job\", instance=~\"$instance\", status!~\"2..\"}[1m])",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -1602,6 +1610,7 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
@@ -1615,6 +1624,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
@@ -1637,7 +1647,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -1680,7 +1691,7 @@
             "uid": "$datasource"
           },
           "exemplar": true,
-          "expr": "rate(http_client_request_duration_seconds_sum{instance=~\"$instance\", job=~\"$job\", cluster_environment=~\"$cluster_environment\"}[1m]) / rate(http_client_request_duration_seconds_count{instance=~\"$instance\", job=~\"$job\", cluster_environment=~\"$cluster_environment\"}[1m])",
+          "expr": "rate(http_client_request_duration_sum{job=~\"$job\", instance=~\"$instance\"}[1m]) / rate(http_client_request_duration_count{job=~\"$job\", instance=~\"$instance\"}[1m])",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -1714,7 +1725,7 @@
           "refId": "A"
         }
       ],
-      "title": "[$cluster_environment] JVM",
+      "title": "[$job] [$instance] JVM",
       "type": "row"
     },
     {
@@ -1727,6 +1738,7 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
@@ -1740,6 +1752,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
@@ -1762,7 +1775,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -1807,7 +1821,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "jvm_memory_used_bytes{instance=~\"$instance\", job=~\"$job\", cluster_environment=~\"$cluster_environment\", id=\"$memory_pool_heap\"}",
+          "expr": "jvm_memory_used{job=~\"$job\", instance=~\"$instance\", id=\"$memory_pool_heap\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Used",
@@ -1817,7 +1831,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "jvm_memory_committed_bytes{instance=~\"$instance\", job=~\"$job\", cluster_environment=~\"$cluster_environment\", id=\"$memory_pool_heap\"}",
+          "expr": "jvm_memory_committed{job=~\"$job\", instance=~\"$instance\", id=\"$memory_pool_heap\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Commited",
@@ -1827,7 +1841,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "jvm_memory_max_bytes{instance=~\"$instance\", job=~\"$job\", cluster_environment=~\"$cluster_environment\", id=\"$memory_pool_heap\"}",
+          "expr": "jvm_memory_max{job=~\"$job\", instance=~\"$instance\", id=\"$memory_pool_heap\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Max",
@@ -1847,6 +1861,7 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
@@ -1860,6 +1875,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
@@ -1882,7 +1898,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -1925,7 +1942,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "jvm_threads_daemon_threads{instance=~\"$instance\", job=~\"$job\", cluster_environment=~\"$cluster_environment\"}",
+          "expr": "jvm_threads_daemon{job=~\"$job\", instance=~\"$instance\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Daemon",
@@ -1935,7 +1952,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "jvm_threads_live_threads{instance=~\"$instance\", job=~\"$job\", cluster_environment=~\"$cluster_environment\"}",
+          "expr": "jvm_threads_live{job=~\"$job\", instance=~\"$instance\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Live",
@@ -1945,7 +1962,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "jvm_threads_peak_threads{instance=~\"$instance\", job=~\"$job\", cluster_environment=~\"$cluster_environment\"}",
+          "expr": "jvm_threads_peak{job=~\"$job\", instance=~\"$instance\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Peak",
@@ -1965,6 +1982,7 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
@@ -1978,6 +1996,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
@@ -2000,7 +2019,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -2038,7 +2058,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "irate(jvm_gc_memory_allocated_bytes_total{instance=~\"$instance\", job=~\"$job\", cluster_environment=~\"$cluster_environment\"}[5m])",
+          "expr": "irate(jvm_gc_memory_allocated{job=~\"$job\", instance=~\"$instance\"}[5m])",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "allocated",
@@ -2048,7 +2068,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "irate(jvm_gc_memory_promoted_bytes_total{instance=~\"$instance\", job=~\"$job\", cluster_environment=~\"$cluster_environment\"}[5m])",
+          "expr": "irate(jvm_gc_memory_promoted{job=~\"$job\", instance=~\"$instance\"}[5m])",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "promoted",
@@ -2068,6 +2088,7 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
@@ -2081,6 +2102,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
@@ -2103,7 +2125,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -2146,7 +2169,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "irate(jvm_gc_pause_seconds_sum{instance=~\"$instance\", job=~\"$job\", cluster_environment=~\"$cluster_environment\"}[5m])",
+          "expr": "irate(jvm_gc_pause_sum{job=~\"$job\", instance=~\"$instance\"}[5m])",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{action}} [{{cause}}]",
@@ -2166,6 +2189,7 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
@@ -2179,6 +2203,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
@@ -2201,7 +2226,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -2244,7 +2270,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "irate(jvm_gc_pause_seconds_count{instance=~\"$instance\", job=~\"$job\", cluster_environment=~\"$cluster_environment\"}[5m])",
+          "expr": "irate(jvm_gc_pause_count{job=~\"$job\", instance=~\"$instance\"}[5m])",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{action}} [{{cause}}]",
@@ -2253,550 +2279,6 @@
       ],
       "title": "GC Count",
       "type": "timeseries"
-    },
-    {
-      "collapsed": true,
-      "datasource": {
-        "type": "prometheus",
-        "uid": "grafanacloud-prom"
-      },
-      "gridPos": {
-        "h": 1,
-        "w": 24,
-        "x": 0,
-        "y": 84
-      },
-      "id": 34,
-      "panels": [
-        {
-          "datasource": {
-            "uid": "$datasource"
-          },
-          "fieldConfig": {
-            "defaults": {
-              "color": {
-                "mode": "thresholds"
-              },
-              "mappings": [],
-              "thresholds": {
-                "mode": "absolute",
-                "steps": [
-                  {
-                    "color": "green"
-                  },
-                  {
-                    "color": "red",
-                    "value": 80
-                  }
-                ]
-              },
-              "unit": "none"
-            },
-            "overrides": []
-          },
-          "gridPos": {
-            "h": 4,
-            "w": 4,
-            "x": 0,
-            "y": 84
-          },
-          "id": 44,
-          "links": [],
-          "maxDataPoints": 100,
-          "options": {
-            "colorMode": "none",
-            "graphMode": "none",
-            "justifyMode": "auto",
-            "orientation": "horizontal",
-            "reduceOptions": {
-              "calcs": [
-                "lastNotNull"
-              ],
-              "fields": "",
-              "values": false
-            },
-            "text": {},
-            "textMode": "auto"
-          },
-          "pluginVersion": "8.1.2",
-          "targets": [
-            {
-              "datasource": {
-                "uid": "$datasource"
-              },
-              "expr": "hikaricp_connections{instance=~\"$instance\", job=~\"$job\", cluster_environment=~\"$cluster_environment\", pool=\"$hikaricp\"}",
-              "format": "time_series",
-              "intervalFactor": 1,
-              "legendFormat": "",
-              "refId": "A"
-            }
-          ],
-          "title": "Connections Size",
-          "type": "stat"
-        },
-        {
-          "datasource": {
-            "uid": "$datasource"
-          },
-          "fieldConfig": {
-            "defaults": {
-              "color": {
-                "mode": "palette-classic"
-              },
-              "custom": {
-                "axisLabel": "",
-                "axisPlacement": "auto",
-                "barAlignment": 0,
-                "drawStyle": "line",
-                "fillOpacity": 10,
-                "gradientMode": "none",
-                "hideFrom": {
-                  "legend": false,
-                  "tooltip": false,
-                  "viz": false
-                },
-                "lineInterpolation": "linear",
-                "lineWidth": 1,
-                "pointSize": 5,
-                "scaleDistribution": {
-                  "type": "linear"
-                },
-                "showPoints": "never",
-                "spanNulls": true,
-                "stacking": {
-                  "group": "A",
-                  "mode": "normal"
-                },
-                "thresholdsStyle": {
-                  "mode": "off"
-                }
-              },
-              "links": [],
-              "mappings": [],
-              "thresholds": {
-                "mode": "absolute",
-                "steps": [
-                  {
-                    "color": "green"
-                  },
-                  {
-                    "color": "red",
-                    "value": 80
-                  }
-                ]
-              },
-              "unit": "short"
-            },
-            "overrides": []
-          },
-          "gridPos": {
-            "h": 8,
-            "w": 20,
-            "x": 4,
-            "y": 84
-          },
-          "id": 36,
-          "links": [],
-          "options": {
-            "legend": {
-              "calcs": [
-                "mean",
-                "lastNotNull",
-                "max",
-                "min"
-              ],
-              "displayMode": "table",
-              "placement": "bottom",
-              "showLegend": true
-            },
-            "tooltip": {
-              "mode": "single"
-            }
-          },
-          "pluginVersion": "8.1.2",
-          "targets": [
-            {
-              "datasource": {
-                "uid": "$datasource"
-              },
-              "expr": "hikaricp_connections_active{instance=~\"$instance\", job=~\"$job\", cluster_environment=~\"$cluster_environment\", pool=\"$hikaricp\"}",
-              "format": "time_series",
-              "intervalFactor": 1,
-              "legendFormat": "Active",
-              "refId": "B"
-            },
-            {
-              "datasource": {
-                "uid": "$datasource"
-              },
-              "expr": "hikaricp_connections_idle{instance=~\"$instance\", job=~\"$job\", cluster_environment=~\"$cluster_environment\", pool=\"$hikaricp\"}",
-              "format": "time_series",
-              "intervalFactor": 1,
-              "legendFormat": "Idle",
-              "refId": "A"
-            },
-            {
-              "datasource": {
-                "uid": "$datasource"
-              },
-              "expr": "hikaricp_connections_pending{instance=~\"$instance\", job=~\"$job\", cluster_environment=~\"$cluster_environment\", pool=\"$hikaricp\"}",
-              "format": "time_series",
-              "intervalFactor": 1,
-              "legendFormat": "Pending",
-              "refId": "C"
-            }
-          ],
-          "title": "Connections",
-          "type": "timeseries"
-        },
-        {
-          "datasource": {
-            "uid": "$datasource"
-          },
-          "fieldConfig": {
-            "defaults": {
-              "color": {
-                "mode": "thresholds"
-              },
-              "mappings": [],
-              "thresholds": {
-                "mode": "absolute",
-                "steps": [
-                  {
-                    "color": "green"
-                  },
-                  {
-                    "color": "red",
-                    "value": 80
-                  }
-                ]
-              },
-              "unit": "none"
-            },
-            "overrides": []
-          },
-          "gridPos": {
-            "h": 4,
-            "w": 4,
-            "x": 0,
-            "y": 88
-          },
-          "id": 46,
-          "links": [],
-          "maxDataPoints": 100,
-          "options": {
-            "colorMode": "none",
-            "graphMode": "none",
-            "justifyMode": "auto",
-            "orientation": "horizontal",
-            "reduceOptions": {
-              "calcs": [
-                "lastNotNull"
-              ],
-              "fields": "",
-              "values": false
-            },
-            "text": {},
-            "textMode": "auto"
-          },
-          "pluginVersion": "8.1.2",
-          "targets": [
-            {
-              "datasource": {
-                "uid": "$datasource"
-              },
-              "expr": "hikaricp_connections_timeout_total{instance=~\"$instance\", job=~\"$job\", cluster_environment=~\"$cluster_environment\", pool=\"$hikaricp\"}",
-              "format": "time_series",
-              "intervalFactor": 1,
-              "legendFormat": "",
-              "refId": "A"
-            }
-          ],
-          "title": "Connection Timeout Count",
-          "type": "stat"
-        },
-        {
-          "datasource": {
-            "uid": "$datasource"
-          },
-          "fieldConfig": {
-            "defaults": {
-              "color": {
-                "mode": "palette-classic"
-              },
-              "custom": {
-                "axisLabel": "",
-                "axisPlacement": "auto",
-                "barAlignment": 0,
-                "drawStyle": "line",
-                "fillOpacity": 10,
-                "gradientMode": "none",
-                "hideFrom": {
-                  "legend": false,
-                  "tooltip": false,
-                  "viz": false
-                },
-                "lineInterpolation": "linear",
-                "lineWidth": 1,
-                "pointSize": 5,
-                "scaleDistribution": {
-                  "type": "linear"
-                },
-                "showPoints": "never",
-                "spanNulls": true,
-                "stacking": {
-                  "group": "A",
-                  "mode": "none"
-                },
-                "thresholdsStyle": {
-                  "mode": "off"
-                }
-              },
-              "links": [],
-              "mappings": [],
-              "thresholds": {
-                "mode": "absolute",
-                "steps": [
-                  {
-                    "color": "green"
-                  },
-                  {
-                    "color": "red",
-                    "value": 80
-                  }
-                ]
-              },
-              "unit": "s"
-            },
-            "overrides": []
-          },
-          "gridPos": {
-            "h": 6,
-            "w": 8,
-            "x": 0,
-            "y": 92
-          },
-          "id": 38,
-          "links": [],
-          "options": {
-            "legend": {
-              "calcs": [],
-              "displayMode": "list",
-              "placement": "bottom",
-              "showLegend": true
-            },
-            "tooltip": {
-              "mode": "single"
-            }
-          },
-          "pluginVersion": "8.1.2",
-          "targets": [
-            {
-              "datasource": {
-                "uid": "$datasource"
-              },
-              "expr": "hikaricp_connections_creation_seconds_sum{instance=~\"$instance\", job=~\"$job\", cluster_environment=~\"$cluster_environment\", pool=\"$hikaricp\"} / hikaricp_connections_creation_seconds_count{instance=~\"$instance\", job=~\"$job\", cluster_environment=~\"$cluster_environment\", pool=\"$hikaricp\"}",
-              "format": "time_series",
-              "intervalFactor": 1,
-              "legendFormat": "Creation Time",
-              "refId": "A"
-            }
-          ],
-          "title": "Connection Creation Time",
-          "type": "timeseries"
-        },
-        {
-          "datasource": {
-            "uid": "$datasource"
-          },
-          "fieldConfig": {
-            "defaults": {
-              "color": {
-                "mode": "palette-classic"
-              },
-              "custom": {
-                "axisLabel": "",
-                "axisPlacement": "auto",
-                "barAlignment": 0,
-                "drawStyle": "line",
-                "fillOpacity": 10,
-                "gradientMode": "none",
-                "hideFrom": {
-                  "legend": false,
-                  "tooltip": false,
-                  "viz": false
-                },
-                "lineInterpolation": "linear",
-                "lineWidth": 1,
-                "pointSize": 5,
-                "scaleDistribution": {
-                  "type": "linear"
-                },
-                "showPoints": "never",
-                "spanNulls": true,
-                "stacking": {
-                  "group": "A",
-                  "mode": "none"
-                },
-                "thresholdsStyle": {
-                  "mode": "off"
-                }
-              },
-              "links": [],
-              "mappings": [],
-              "thresholds": {
-                "mode": "absolute",
-                "steps": [
-                  {
-                    "color": "green"
-                  },
-                  {
-                    "color": "red",
-                    "value": 80
-                  }
-                ]
-              },
-              "unit": "s"
-            },
-            "overrides": []
-          },
-          "gridPos": {
-            "h": 6,
-            "w": 8,
-            "x": 8,
-            "y": 92
-          },
-          "id": 42,
-          "links": [],
-          "options": {
-            "legend": {
-              "calcs": [],
-              "displayMode": "list",
-              "placement": "bottom",
-              "showLegend": true
-            },
-            "tooltip": {
-              "mode": "single"
-            }
-          },
-          "pluginVersion": "8.1.2",
-          "targets": [
-            {
-              "datasource": {
-                "uid": "$datasource"
-              },
-              "expr": "hikaricp_connections_usage_seconds_sum{instance=~\"$instance\", job=~\"$job\", cluster_environment=~\"$cluster_environment\", pool=\"$hikaricp\"} / hikaricp_connections_usage_seconds_count{instance=~\"$instance\", job=~\"$job\", cluster_environment=~\"$cluster_environment\", pool=\"$hikaricp\"}",
-              "format": "time_series",
-              "intervalFactor": 1,
-              "legendFormat": "Usage Time",
-              "refId": "A"
-            }
-          ],
-          "title": "Connection Usage Time",
-          "type": "timeseries"
-        },
-        {
-          "datasource": {
-            "uid": "$datasource"
-          },
-          "fieldConfig": {
-            "defaults": {
-              "color": {
-                "mode": "palette-classic"
-              },
-              "custom": {
-                "axisLabel": "",
-                "axisPlacement": "auto",
-                "barAlignment": 0,
-                "drawStyle": "line",
-                "fillOpacity": 10,
-                "gradientMode": "none",
-                "hideFrom": {
-                  "legend": false,
-                  "tooltip": false,
-                  "viz": false
-                },
-                "lineInterpolation": "linear",
-                "lineWidth": 1,
-                "pointSize": 5,
-                "scaleDistribution": {
-                  "type": "linear"
-                },
-                "showPoints": "never",
-                "spanNulls": true,
-                "stacking": {
-                  "group": "A",
-                  "mode": "none"
-                },
-                "thresholdsStyle": {
-                  "mode": "off"
-                }
-              },
-              "links": [],
-              "mappings": [],
-              "thresholds": {
-                "mode": "absolute",
-                "steps": [
-                  {
-                    "color": "green"
-                  },
-                  {
-                    "color": "red",
-                    "value": 80
-                  }
-                ]
-              },
-              "unit": "s"
-            },
-            "overrides": []
-          },
-          "gridPos": {
-            "h": 6,
-            "w": 8,
-            "x": 16,
-            "y": 92
-          },
-          "id": 40,
-          "links": [],
-          "options": {
-            "legend": {
-              "calcs": [],
-              "displayMode": "list",
-              "placement": "bottom",
-              "showLegend": true
-            },
-            "tooltip": {
-              "mode": "single"
-            }
-          },
-          "pluginVersion": "8.1.2",
-          "targets": [
-            {
-              "datasource": {
-                "uid": "$datasource"
-              },
-              "expr": "hikaricp_connections_acquire_seconds_sum{instance=~\"$instance\", job=~\"$job\", cluster_environment=~\"$cluster_environment\", pool=\"$hikaricp\"} / hikaricp_connections_acquire_seconds_count{instance=~\"$instance\", job=~\"$job\", cluster_environment=~\"$cluster_environment\", pool=\"$hikaricp\"}",
-              "format": "time_series",
-              "intervalFactor": 1,
-              "legendFormat": "Acquire Time",
-              "refId": "A"
-            }
-          ],
-          "title": "Connection Acquire Time",
-          "type": "timeseries"
-        }
-      ],
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "grafanacloud-prom"
-          },
-          "refId": "A"
-        }
-      ],
-      "title": "[$cluster_environment] HikariCP Statistics",
-      "type": "row"
     },
     {
       "collapsed": false,
@@ -2808,9 +2290,9 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 85
+        "y": 84
       },
-      "id": 285,
+      "id": 34,
       "panels": [],
       "targets": [
         {
@@ -2821,13 +2303,79 @@
           "refId": "A"
         }
       ],
-      "title": "Loki4j",
+      "title": "[$job] [$instance] HikariCP Statistics",
       "type": "row"
     },
     {
       "datasource": {
-        "type": "prometheus",
-        "uid": "${datasource}"
+        "uid": "$datasource"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 0,
+        "y": 85
+      },
+      "id": 44,
+      "links": [],
+      "maxDataPoints": 100,
+      "options": {
+        "colorMode": "none",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "10.3.0-62838",
+      "targets": [
+        {
+          "datasource": {
+            "uid": "$datasource"
+          },
+          "expr": "hikaricp_connections{job=~\"$job\", instance=~\"$instance\", pool=\"$hikaricp\"}",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "Connections Size",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "uid": "$datasource"
       },
       "fieldConfig": {
         "defaults": {
@@ -2835,6 +2383,7 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
@@ -2848,6 +2397,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
@@ -2855,21 +2405,23 @@
               "type": "linear"
             },
             "showPoints": "never",
-            "spanNulls": false,
+            "spanNulls": true,
             "stacking": {
               "group": "A",
-              "mode": "none"
+              "mode": "normal"
             },
             "thresholdsStyle": {
               "mode": "off"
             }
           },
+          "links": [],
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -2883,11 +2435,201 @@
       },
       "gridPos": {
         "h": 8,
+        "w": 20,
+        "x": 4,
+        "y": 85
+      },
+      "id": 36,
+      "links": [],
+      "options": {
+        "legend": {
+          "calcs": [
+            "mean",
+            "lastNotNull",
+            "max",
+            "min"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "8.1.2",
+      "targets": [
+        {
+          "datasource": {
+            "uid": "$datasource"
+          },
+          "expr": "hikaricp_connections_active{job=~\"$job\", instance=~\"$instance\", pool=\"$hikaricp\"}",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "Active",
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "uid": "$datasource"
+          },
+          "expr": "hikaricp_connections_idle{job=~\"$job\", instance=~\"$instance\", pool=\"$hikaricp\"}",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "Idle",
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "uid": "$datasource"
+          },
+          "expr": "hikaricp_connections_pending{job=~\"$job\", instance=~\"$instance\", pool=\"$hikaricp\"}",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "Pending",
+          "refId": "C"
+        }
+      ],
+      "title": "Connections",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "uid": "$datasource"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 0,
+        "y": 89
+      },
+      "id": 46,
+      "links": [],
+      "maxDataPoints": 100,
+      "options": {
+        "colorMode": "none",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "10.3.0-62838",
+      "targets": [
+        {
+          "datasource": {
+            "uid": "$datasource"
+          },
+          "expr": "hikaricp_connections_timeout_total{job=~\"$job\", instance=~\"$instance\", pool=\"$hikaricp\"}",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "Connection Timeout Count",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$datasource"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "links": [],
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "s"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
         "w": 8,
         "x": 0,
-        "y": 86
+        "y": 93
       },
-      "id": 287,
+      "id": 38,
+      "links": [],
       "options": {
         "legend": {
           "calcs": [],
@@ -2904,46 +2646,23 @@
       "targets": [
         {
           "datasource": {
-            "uid": "${datasource}"
+            "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "rate(loki4j_send_time_seconds_sum{job=~\"$job\", instance=~\"$instance\", cluster_environment=~\"$cluster_environment\"}[5m]) / rate(loki4j_send_time_seconds_count{job=~\"$job\", instance=~\"$instance\", cluster_environment=~\"$cluster_environment\"}[5m])",
-          "hide": false,
-          "interval": "",
-          "legendFormat": "HTTP send",
+          "expr": "hikaricp_connections_creation_sum{job=~\"$job\", instance=~\"$instance\", pool=\"$hikaricp\"} / hikaricp_connections_creation_count{job=~\"$job\", instance=~\"$instance\", pool=\"$hikaricp\"}",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "Creation Time",
           "range": true,
-          "refId": "B"
-        },
-        {
-          "datasource": {
-            "uid": "${datasource}"
-          },
-          "editorMode": "code",
-          "expr": "rate(loki4j_encode_time_seconds_sum{job=~\"$job\", instance=~\"$instance\", cluster_environment=~\"$cluster_environment\"}[5m]) / rate(loki4j_encode_time_seconds_count{job=~\"$job\", instance=~\"$instance\", cluster_environment=~\"$cluster_environment\"}[5m])",
-          "hide": false,
-          "interval": "",
-          "legendFormat": "encode",
-          "range": true,
-          "refId": "C"
-        },
-        {
-          "datasource": {
-            "uid": "${datasource}"
-          },
-          "expr": "rate(loki4j_append_time_seconds_sum{job=~\"$job\", instance=~\"$instance\"}[5m]) / rate(loki4j_append_time_seconds_count{job=~\"$job\", instance=~\"$instance\"}[5m])",
-          "hide": false,
-          "interval": "",
-          "legendFormat": "single event append",
-          "refId": "D"
+          "refId": "A"
         }
       ],
-      "title": "Time to perform operation",
+      "title": "Connection Creation Time",
       "type": "timeseries"
     },
     {
       "datasource": {
-        "type": "prometheus",
-        "uid": "${datasource}"
+        "uid": "$datasource"
       },
       "fieldConfig": {
         "defaults": {
@@ -2951,6 +2670,7 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
@@ -2964,6 +2684,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
@@ -2971,7 +2692,7 @@
               "type": "linear"
             },
             "showPoints": "never",
-            "spanNulls": false,
+            "spanNulls": true,
             "stacking": {
               "group": "A",
               "mode": "none"
@@ -2980,12 +2701,14 @@
               "mode": "off"
             }
           },
+          "links": [],
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -2993,17 +2716,18 @@
               }
             ]
           },
-          "unit": "short"
+          "unit": "s"
         },
         "overrides": []
       },
       "gridPos": {
-        "h": 8,
+        "h": 6,
         "w": 8,
         "x": 8,
-        "y": 86
+        "y": 93
       },
-      "id": 289,
+      "id": 42,
+      "links": [],
       "options": {
         "legend": {
           "calcs": [],
@@ -3020,35 +2744,21 @@
       "targets": [
         {
           "datasource": {
-            "uid": "${datasource}"
+            "uid": "$datasource"
           },
-          "editorMode": "code",
-          "expr": "rate(loki4j_encode_batches_total{job=~\"$job\", instance=~\"$instance\", cluster_environment=~\"$cluster_environment\"}[5m])",
-          "interval": "",
-          "legendFormat": "processed by encoder",
-          "range": true,
+          "expr": "hikaricp_connections_usage_sum{job=~\"$job\", instance=~\"$instance\", pool=\"$hikaricp\"} / hikaricp_connections_usage_count{job=~\"$job\", instance=~\"$instance\", pool=\"$hikaricp\"}",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "Usage Time",
           "refId": "A"
-        },
-        {
-          "datasource": {
-            "uid": "${datasource}"
-          },
-          "editorMode": "code",
-          "expr": "rate(loki4j_send_batches_total{job=~\"$job\", instance=~\"$instance\", cluster_environment=~\"$cluster_environment\"}[5m])",
-          "hide": false,
-          "interval": "",
-          "legendFormat": "sent to Loki",
-          "range": true,
-          "refId": "B"
         }
       ],
-      "title": "Number of batches",
+      "title": "Connection Usage Time",
       "type": "timeseries"
     },
     {
       "datasource": {
-        "type": "prometheus",
-        "uid": "${datasource}"
+        "uid": "$datasource"
       },
       "fieldConfig": {
         "defaults": {
@@ -3056,6 +2766,7 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
@@ -3069,6 +2780,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
@@ -3076,7 +2788,7 @@
               "type": "linear"
             },
             "showPoints": "never",
-            "spanNulls": false,
+            "spanNulls": true,
             "stacking": {
               "group": "A",
               "mode": "none"
@@ -3085,12 +2797,14 @@
               "mode": "off"
             }
           },
+          "links": [],
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -3098,17 +2812,18 @@
               }
             ]
           },
-          "unit": "short"
+          "unit": "s"
         },
         "overrides": []
       },
       "gridPos": {
-        "h": 8,
+        "h": 6,
         "w": 8,
         "x": 16,
-        "y": 86
+        "y": 93
       },
-      "id": 288,
+      "id": 40,
+      "links": [],
       "options": {
         "legend": {
           "calcs": [],
@@ -3125,22 +2840,21 @@
       "targets": [
         {
           "datasource": {
-            "uid": "${datasource}"
+            "uid": "$datasource"
           },
-          "editorMode": "code",
-          "expr": "rate(loki4j_send_bytes_sum{job=~\"$job\", instance=~\"$instance\", cluster_environment=~\"$cluster_environment\"}[5m]) / rate(loki4j_send_bytes_count{job=~\"$job\", instance=~\"$instance\", cluster_environment=~\"$cluster_environment\"}[5m])",
-          "interval": "",
-          "legendFormat": "sent",
-          "range": true,
+          "expr": "hikaricp_connections_acquire_sum{job=~\"$job\", instance=~\"$instance\", pool=\"$hikaricp\"} / hikaricp_connections_acquire_count{job=~\"$job\", instance=~\"$instance\", pool=\"$hikaricp\"}",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "Acquire Time",
           "refId": "A"
         }
       ],
-      "title": "Size of batches sent to Loki",
+      "title": "Connection Acquire Time",
       "type": "timeseries"
     }
   ],
   "refresh": "10s",
-  "schemaVersion": 38,
+  "schemaVersion": 39,
   "tags": [
     "java",
     "ctac"
@@ -3169,45 +2883,22 @@
       {
         "current": {
           "selected": false,
-          "text": "brain",
-          "value": "brain"
-        },
-        "hide": 0,
-        "includeAll": false,
-        "label": "job",
-        "multi": false,
-        "name": "job",
-        "options": [
-          {
-            "selected": true,
-            "text": "brain",
-            "value": "brain"
-          }
-        ],
-        "query": "brain",
-        "queryValue": "",
-        "skipUrlSync": false,
-        "type": "custom"
-      },
-      {
-        "current": {
-          "selected": false,
-          "text": "production",
-          "value": "production"
+          "text": "ctac/brain",
+          "value": "ctac/brain"
         },
         "datasource": {
           "uid": "$datasource"
         },
-        "definition": "label_values(cluster_environment)",
+        "definition": "label_values(job)",
         "hide": 0,
         "includeAll": false,
         "label": "Environment",
         "multi": false,
-        "name": "cluster_environment",
+        "name": "job",
         "options": [],
         "query": {
-          "query": "label_values(cluster_environment)",
-          "refId": "Prometheus Staging-cluster_environment-Variable-Query"
+          "query": "label_values(job)",
+          "refId": "Prometheus Production-job-Variable-Query"
         },
         "refresh": 1,
         "regex": "",
@@ -3221,14 +2912,14 @@
       {
         "allValue": ".*",
         "current": {
-          "selected": false,
-          "text": "All",
-          "value": "$__all"
+          "selected": true,
+          "text": "local-archangel-a833f86f",
+          "value": "local-archangel-a833f86f"
         },
         "datasource": {
           "uid": "$datasource"
         },
-        "definition": "label_values(jvm_classes_loaded_classes, instance)",
+        "definition": "label_values(jvm_classes_loaded, instance)",
         "hide": 0,
         "includeAll": true,
         "label": "Instance",
@@ -3236,7 +2927,7 @@
         "name": "instance",
         "options": [],
         "query": {
-          "query": "label_values(jvm_classes_loaded_classes, instance)",
+          "query": "label_values(jvm_classes_loaded, instance)",
           "refId": "Prometheus Production-instance-Variable-Query"
         },
         "refresh": 1,
@@ -3257,7 +2948,7 @@
         "datasource": {
           "uid": "$datasource"
         },
-        "definition": "label_values(hikaricp_connections{instance=~\"$instance\", job=~\"$job\", cluster_environment=~\"$cluster_environment\"}, pool)",
+        "definition": "label_values(hikaricp_connections{job=~\"$job\", instance=~\"$instance\"}, pool)",
         "hide": 0,
         "includeAll": false,
         "label": "HikariCP-Pool",
@@ -3265,7 +2956,7 @@
         "name": "hikaricp",
         "options": [],
         "query": {
-          "query": "label_values(hikaricp_connections{instance=~\"$instance\", job=~\"$job\", cluster_environment=~\"$cluster_environment\"}, pool)",
+          "query": "label_values(hikaricp_connections{job=~\"$job\", instance=~\"$instance\"}, pool)",
           "refId": "Prometheus Production-hikaricp-Variable-Query"
         },
         "refresh": 1,
@@ -3279,14 +2970,14 @@
       },
       {
         "current": {
-          "selected": false,
+          "selected": true,
           "text": "All",
           "value": "$__all"
         },
         "datasource": {
           "uid": "$datasource"
         },
-        "definition": "label_values(jvm_memory_used_bytes{job=~\"$job\", cluster_environment=~\"$cluster_environment\", area=\"heap\"},id)",
+        "definition": "label_values(jvm_memory_used{job=~\"$job\", instance=~\"$instance\", area=\"heap\"},id)",
         "hide": 0,
         "includeAll": true,
         "label": "Memory Pool (heap)",
@@ -3294,7 +2985,7 @@
         "name": "memory_pool_heap",
         "options": [],
         "query": {
-          "query": "label_values(jvm_memory_used_bytes{job=~\"$job\", cluster_environment=~\"$cluster_environment\", area=\"heap\"},id)",
+          "query": "label_values(jvm_memory_used{job=~\"$job\", instance=~\"$instance\", area=\"heap\"},id)",
           "refId": "Prometheus Production-memory_pool_heap-Variable-Query"
         },
         "refresh": 1,
@@ -3309,7 +3000,7 @@
     ]
   },
   "time": {
-    "from": "now-3h",
+    "from": "now-15m",
     "to": "now"
   },
   "timepicker": {
@@ -3339,6 +3030,6 @@
   "timezone": "",
   "title": "Brain",
   "uid": "ctac",
-  "version": 106,
+  "version": 4,
   "weekStart": ""
 }

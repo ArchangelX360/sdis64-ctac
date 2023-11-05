@@ -40,7 +40,7 @@ class PrometheusPlugin(configuration: Configuration) {
                     val urlCopy = URLBuilder(context.url).build() // `build()` on URLBuilder is not immutable
                     plugin.registry
                         .summary(
-                            "http_client_request_duration_seconds", mutableListOf(
+                            "http_client_request_duration", mutableListOf(
                                 ImmutableTag("method", context.method.value),
                                 ImmutableTag("host", urlCopy.hostWithPort),
                                 ImmutableTag("path", urlCopy.redactedFullPath(plugin.urlParametersToRedact)),
@@ -56,7 +56,7 @@ class PrometheusPlugin(configuration: Configuration) {
             scope.receivePipeline.intercept(HttpReceivePipeline.Before) {
                 plugin.registry
                     .summary(
-                        "http_client_request_duration_seconds", mutableListOf(
+                        "http_client_request_duration", mutableListOf(
                             ImmutableTag("method", it.request.method.value),
                             ImmutableTag("host", it.request.url.hostWithPort),
                             ImmutableTag("path", it.request.url.redactedFullPath(plugin.urlParametersToRedact)),

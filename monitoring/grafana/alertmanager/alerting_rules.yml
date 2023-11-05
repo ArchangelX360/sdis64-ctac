@@ -4,21 +4,21 @@ groups:
   - name: System health
     rules:
       - alert: BrainTargetDown
-        expr: absent(up{job="brain", cluster_environment="production"})
+        expr: absent(target_info{job="ctac/brain", instance="production-1"})
         for: 0m
         labels:
           severity: page
         annotations:
-          summary: Promtheus of '{{ $labels.job }}' is down.
+          summary: Prometheus of '{{ $labels.job }}' is down.
       - alert: BrainTooManyFileBeingOpened
-        expr: rate(process_files_open_files{job="brain", cluster_environment="production"}[10m]) > 15
+        expr: rate(process_files_open{job="ctac/brain", instance="production-1"}[10m]) > 15
         for: 0m
         labels:
           severity: page
         annotations:
           summary: Too many files are being opened.
       - alert: BrainAPI5xxRateTooHigh
-        expr: rate(http_server_requests_seconds_count{job="brain", cluster_environment="production", status=~"5.."}[5m]) > 0
+        expr: rate(http_server_requests_count{job="ctac/brain", instance="production-1", status=~"5.."}[5m]) > 0
         for: 5m
         labels:
           severity: page
@@ -27,7 +27,7 @@ groups:
   - name: Systel cache
     rules:
       - alert: SystelCacheIsStale
-        expr: time() - brain_fetcher_last_successful_refresh{job="brain", cluster_environment="production", fetcher_name=~"systel_cache.*"} > 600 # 10min
+        expr: time() - brain_fetcher_last_successful_refresh{job="ctac/brain", instance="production-1", fetcher_name=~"systel_cache.*"} > 600 # 10min
         for: 0m
         labels:
           severity: page
@@ -36,7 +36,7 @@ groups:
   - name: Fetcher
     rules:
       - alert: FetcherNotRefreshing
-        expr: time() - brain_fetcher_last_successful_refresh{job="brain", cluster_environment="production", fetcher_name!~"systel_cache.*"} > 1800 # 30min
+        expr: time() - brain_fetcher_last_successful_refresh{job="ctac/brain", instance="production-1", fetcher_name!~"systel_cache.*"} > 1800 # 30min
         for: 0m
         labels:
           severity: page

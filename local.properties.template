@@ -4,6 +4,9 @@
 # docker.username=
 # docker.password=
 
+# otel.exporter.otlp.endpoint=
+# otel.exporter.otlp.basic-token=
+
 # SDIS64 environments are not directly reachable from the public internet, they are configured under a ssh proxy
 # the following properties relates to this proxy ssh public facing server.
 # ssh.remotes.proxy.host=

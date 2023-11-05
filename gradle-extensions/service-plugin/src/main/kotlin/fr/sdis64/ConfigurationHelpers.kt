@@ -17,7 +17,7 @@ import org.gradle.api.provider.Provider
 //            }
 //        }.orElse(err)
 // }
-private fun Project.propOrEnvProvider(propName: String, envVar: String? = null): Provider<Result<String>> {
+fun Project.propOrEnvProvider(propName: String, envVar: String? = null): Provider<Result<String>> {
     val err =
         Result.failure<String>(IllegalStateException("either property '$propName' or environment variable $envVar must be defined"))
     return project.provider { project.findProperty(propName) as String? }.map { s ->
@@ -28,8 +28,8 @@ private fun Project.propOrEnvProvider(propName: String, envVar: String? = null):
     }.orElse(err)
 }
 
-internal fun Project.getPropOrEnv(propName: String, envVar: String? = null): String? =
+fun Project.getPropOrEnv(propName: String, envVar: String? = null): String? =
     propOrEnvProvider(propName, envVar).get().getOrNull()
 
-internal fun Project.getMandatoryPropOrEnv(propName: String, envVar: String? = null): String =
+fun Project.getMandatoryPropOrEnv(propName: String, envVar: String? = null): String =
     propOrEnvProvider(propName, envVar).get().getOrThrow()
