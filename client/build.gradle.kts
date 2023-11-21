@@ -12,7 +12,6 @@ kotlin {
         browser()
     }
     sourceSets {
-        @Suppress("UNUSED_VARIABLE")
         val commonMain by getting {
             dependencies {
                 api(project(":api"))
@@ -27,7 +26,6 @@ kotlin {
                 implementation(libs.ktor.client.serialization)
             }
         }
-        @Suppress("UNUSED_VARIABLE")
         val jvmMain by getting {
             dependencies {
                 implementation(libs.ktor.client.java)
