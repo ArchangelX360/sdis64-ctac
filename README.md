@@ -12,14 +12,14 @@ To run build and test a subproject you can run:
 ./gradlew ":name_of_the_subproject:test"
 ```
 
-Example for running the test suite of `brain` subproject:
+Example for running the test suite of `backend` subproject:
 
 ```
-./gradlew ":brain:test"
+./gradlew ":backend:test"
 ```
 
 > To know more about which command you can run on a subproject, you can use the `tasks` command.
-> e.g. `./gradlew ":brain:tasks"` will show you every possible command that can run on the `brain` subproject
+> e.g. `./gradlew ":backend:tasks"` will show you every possible command that can run on the `backend` subproject
 
 
 ### Configuration encryption setup
@@ -28,11 +28,11 @@ Example for running the test suite of `brain` subproject:
 
 Run the command
 
-    ./gradlew :brain:encrypt --value=<the value to encrypt>
+    ./gradlew :backend:encrypt --value=<the value to encrypt>
 
 For example:
 
-    ./gradlew :brain:encrypt --value=coucou
+    ./gradlew :backend:encrypt --value=coucou
 
 The value must be specified in the configuration file surrounded by `ENC(<value>)`, e.g. `ctac.dragon.password=ENC(RsXot+FB+ftjPR6qXmgZy3/1+HhA==)`
 

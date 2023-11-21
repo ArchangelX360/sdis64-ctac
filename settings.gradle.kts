@@ -9,7 +9,7 @@ includeBuild("gradle-extensions")
 
 include("api")
 include("client")
-include("brain")
+include("backend")
 include("gateway")
 include("monitoring")
 include("resources")

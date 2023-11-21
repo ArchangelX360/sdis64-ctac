@@ -5,7 +5,7 @@
 build
 
 local.properties
-brain/src/main/resources/application-default.properties
-brain/configuration-encryption-key
+backend/src/main/resources/application-default.properties
+backend/configuration-encryption-key
 
 ui/src/jsMain/resources/maps/*.png

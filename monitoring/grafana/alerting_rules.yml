@@ -1,0 +1,44 @@
+# /etc/prometheus/alerting_rules.yml
+
+groups:
+  - name: System health
+    rules:
+      - alert: BackendTargetDown
+        expr: absent(target_info{job="ctac/backend", instance="production-1"})
+        for: 0m
+        labels:
+          severity: page
+        annotations:
+          summary: Prometheus of '{{ $labels.job }}' is down.
+      - alert: BackendTooManyFileBeingOpened
+        expr: rate(process_files_open{job="ctac/backend", instance="production-1"}[10m]) > 15
+        for: 0m
+        labels:
+          severity: page
+        annotations:
+          summary: Too many files are being opened.
+      - alert: BackendAPI5xxRateTooHigh
+        expr: rate(http_server_requests_count{job="ctac/backend", instance="production-1", status=~"5.."}[5m]) > 0
+        for: 5m
+        labels:
+          severity: page
+        annotations:
+          summary: API route '{{ $labels.uri }}' is erroring.
+  - name: Systel cache
+    rules:
+      - alert: SystelCacheIsStale
+        expr: time() - backend_fetcher_last_successful_refresh{job="ctac/backend", instance="production-1", fetcher_name=~"systel_cache.*"} > 600 # 10min
+        for: 0m
+        labels:
+          severity: page
+        annotations:
+          summary: Systel cache '{{ $labels.fetcher_name }}' is stale.
+  - name: Fetcher
+    rules:
+      - alert: FetcherNotRefreshing
+        expr: time() - backend_fetcher_last_successful_refresh{job="ctac/backend", instance="production-1", fetcher_name!~"systel_cache.*"} > 1800 # 30min
+        for: 0m
+        labels:
+          severity: page
+        annotations:
+          summary: Fetcher '{{ $labels.fetcher_name }}' is not being refreshed.

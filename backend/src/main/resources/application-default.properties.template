@@ -1,0 +1,13 @@
+ctac.browser.remote-debug-url=http://localhost:9222
+ctac.ldap.url=ldap://127.0.0.1:10389
+ctac.maps.storage.maps-directory-path=/tmp
+ctac.systel.base-url=http://127.0.0.1:10000
+jasypt.encryptor.private-key-location=
+loki.username=
+loki.password=
+server.servlet.session.cookie.domain=localhost
+spring.datasource.password=ctac
+spring.datasource.url=jdbc:postgresql://127.0.0.1:5432/ctac
+spring.datasource.username=ctac
+
+# Use this template to set up a local `application-default.properties` file to be picked up when locally developing backend
