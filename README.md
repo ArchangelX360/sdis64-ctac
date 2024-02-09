@@ -1,6 +1,15 @@
 # CTAC
 
+> [!IMPORTANT]  
+> It is with a sad heart that I need to announce that since this 9th of February 2024, the SDIS64 officially decided to decomission
+> these services and thus this UI will no longer be displayed in the operational center (CTAC) of the SDIS64.
+>
+> It was my pleasure to maintain it for 8 years.
+
 Monorepo of CTAC services of the SDIS64.
+
+This project was a web interface aggregating data from multiple sources; updated in real-time and displayed to call centre operators on an operational wall to help decision making and anticipation during emergency services' interventions.
+It supervised firefighting assets over 7,600 km2 of French territory, area of action of the SDIS64 Firemen departement.
 
 ## Local environment setup
 
